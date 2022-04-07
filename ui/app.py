@@ -23,7 +23,9 @@ RTC_CONFIGURATION = RTCConfiguration(
 
 
 def send_audio_and_text(audio_file_id: str, text: str) -> str:
-    pass
+    ...
+    # st.session_state['uuid_to_read'] =
+    # return audio_file_id, text
     # api call(file_id, text)
     # api read wav file, return wav file sounding like origin text but saying `text`
 
@@ -40,7 +42,7 @@ def upload_to_bucket(bucket_name, source_file, destination_blob_name):
     # destination_blob_name = "storage-object-name"
 
     storage_client = storage.Client.from_service_account_json(
-        "/Users/Ali_1/Documents/Coding/Google/lbg-hackathon-2022/we-dont-talk-anymore/hackathon-team-07-904256b7513d.json")
+        "hackathon-team-07-904256b7513d.json")
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
 
@@ -62,22 +64,18 @@ It can imitate your voice from a recording of a few seconds and say whatever you
 """
     )
     app_sst()
-    st.text_input(label='What do you want to hear yourself say?',
-                  value='We don\'t talk anymore',
-                  key='text-input-for-speech')
-    st.button(label='Submit text and recording of my voice',
-              key='submit-audio-text-button',
-              help='Generate your audio file!',
-              on_click=send_audio_and_text,
-              )
+
     # This is the widget to display the imitated recording. We will remove the other stuff and display this afterwards.
     # send_audio_and_text()
-    base_url = 'https://storage.googleapis.com/hackathon-team-07.appspot.com/'
-
-    st.audio(data='https://storage.googleapis.com/hackathon-team-07.appspot.com/7e89b7b4-906e-4c2f-9690-4bf13a36a379.wav', format="audio/wav")
+    base_url = 'https://storage.googleapis.com/hackathon-team-07.appspot.com'
+    audio_url = f'{base_url}/{st.session_state["uuid_to_read"].wav}'
+    st.audio(data=audio_url, format="audio/wav")
 
 
 def app_sst():
+    user_input = st.text_input(label='What do you want to hear yourself say?',
+                               value='We don\'t talk anymore',
+                               key='text-input-for-speech')
     webrtc_ctx = webrtc_streamer(
         key="some-unique-key",
         mode=WebRtcMode.SENDONLY,
@@ -127,6 +125,13 @@ def app_sst():
 
         # Reset
         st.session_state["audio_buffer"] = pydub.AudioSegment.empty()
+
+        st.button(label='Submit text and recording of my voice',
+                  key='submit-audio-text-button',
+                  help='Generate your audio file!',
+                  on_click=send_audio_and_text,
+                  args=(uuid_str, user_input)
+                  )
 
 
 if __name__ == "__main__":
