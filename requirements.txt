@@ -15,3 +15,7 @@ urllib3==1.26.7
 visdom==0.1.8.9
 webrtcvad==2.0.10
 torch==1.11.0
+Flask
+fastapi
+pydub
+scipy
