@@ -14,7 +14,10 @@
 *.bcf
 *.toc
 *.wav
+*.mp3
 *.sh
 encoder/saved_models/*
 synthesizer/saved_models/*
 vocoder/saved_models/*
+saved_models/*
+venv/*
