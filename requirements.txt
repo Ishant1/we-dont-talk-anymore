@@ -17,5 +17,4 @@ webrtcvad==2.0.10
 torch==1.11.0
 Flask
 fastapi
-pydub
 scipy

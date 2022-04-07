@@ -1,17 +1,18 @@
 from typing import Optional
 import numpy as np
 import soundfile as sf
+import os
 
-from flask import request, url_for
 from flask_api import FlaskAPI, status, exceptions
 from fastapi import FastAPI
 
 from app.config import syn_model_fpath
 from app.setup import setup
-from app.utils import save_file_from_gcloud
+from app.utils import save_file_from_gcloud, write_to_cloud
 from Real_Time_Voice_Cloning.encoder import inference as encoder
 from Real_Time_Voice_Cloning.synthesizer.inference import Synthesizer
 from Real_Time_Voice_Cloning.vocoder import inference as vocoder
+from uuid import uuid4
 
 
 
@@ -48,7 +49,14 @@ def buildaudio(blob_name: str, text: str, local: Optional[int] = 1):
         # Save it on the disk
         filename = "demo_output_%02d.wav" % 1
         sf.write(filename, generated_wav.astype(np.float32), synthesizer.sample_rate)
-        return status.HTTP_200_OK
+
+        blob_name = str(uuid4())+'.wav'
+        write_to_cloud(blob_name,filename)
+
+        os.remove(filename)
+        os.remove(loc)
+
+        return blob_name
 
     else:
         return status.HTTP_400_BAD_REQUEST
