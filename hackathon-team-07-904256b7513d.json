@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "hackathon-team-07",
+  "private_key_id": "904256b7513d7316dfa4086739741ad24af18685",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCSwF/oq/okfckq\nL8GM0fOrUfsRHlVeWY7fL733rBdGT430HaZo8AbsLHq/0CWH/FbXmXOLcdG9AiWK\nYyi0QJ5hQc/1kBaIdXQmlMsDrX8mQe9j0FGbelcgZZ1aeY9C7bw1Uhj2wBIONPhC\nHXu4kyMNZZgMtQrUIoWZMhFxrhuV+VPzXI78uGy22SS/XEJxdZ9SGfBxv2880AL8\nZQzNbM902ULF70uEDOyojkW3N0iB1xzeB3JrRRqmlbvLTCKwmErPtJTuMzs0p23Q\nJAKUfupX1sdiLVftf2eqH2Zw7WWIc3SNyPSQ3eakyos6BGMOYSrnkUnhd5GeB7a2\nP/g72DADAgMBAAECggEAEdbmnH4SLaRy3g4pzQjAF9f37tf3+xJlBAGllLmWp2VI\nCuBzLczb8pLiUHX+Uf5yv3PNMCrjxcJrNjGhWEQwsf788kuT9FO0N8pyYXM9Aoq/\nuKuxd/aSfS2NHYYAdzDiO73MAMGkOuuP2wMC2r2xjvvbf36fSd7GdzM3G/wqffu+\n1+jOlh4YSoJvo26ncokAp+kJtXy80GpzaG1HCsgqH3B+DrWPeYZQkv01TPYpZhl2\nDAc+Y9xcaixUwhu8L7WNw8WMKCN9ZjVLTpxwbY5bRFI9lHSbE8QJtgXt2EEBiZln\nKi0iwW3v0jka3biyjZQnsKpwaoG7ewJx48RFN0Cv5QKBgQDNRu7LqSu2WKNxjA+4\n2sIBE8X4henDOu1eRfmueCSfiNXBsP7XWcDBDAY0wB37iVJtedQcjYilF9z1aNA4\nmtPwNPD2ffNjVsYIG3WRCSZRyQgJ48OS45KHXdNEyX+p1fTpEl5TJ631yB6mPWTx\nHiF1kJldbzBg8xY+DMDkTLD/RQKBgQC3A1QGQGc0g6oZC6XcZ+2Qc03ZPRG0AOxs\nROchbZWI8DVvGiV71kPl8pSe/RUJaxlh2rLQ3QgpXPodXE3Qr31ub7TQKfxCr+84\nLRJCPo9Z7KshCqRU2CstiJtgUDJ1nzzbJ2OjbCdF3YPAenRYeYgGt64QErsFIrII\na1h5yPiipwKBgEBtR9th0BdeAIZNuE2DUyp1Y0gZ94FPyFozSicJDC2KC9TL0WAT\nilzMglIiDgb5VYaImxsPDNkMAUyAxgFODsCwTQSACVifTm4S+DY6Ee3PU5ePBb3f\ncQjNWNaZC1lpjoFsQ3CD3qRqV7xDPqAynbvBU3EwyZVUFiIJbKz6qP6lAoGAfGxa\n19U5VU6eemCc5vgRXz/FEYifXI20Lve5W9Sw8WS+L0bLbSIDD3aY7G6LuteBbjHN\nmIptXhHESenTTanB0S9I8q1Yv831CXA7FaaKt0xcHB6sErLUyCQz3osngyg7q5Nf\n/l8tZCZxyI54Qx59CHQgdvUFCTzJZUf14vZrc8kCgYB2FxI5YMh6Xqk9pAn3Lj76\nslihisZ35dm9IFhcrdoTosavBBFgUsOFwd3GeEdsNY5MROIMOWbMawuFj+y9lS6S\nHFtjsHn6GhuoMdmtxO/OYOO1ModJRXI54F4KCgrUozgFjhqC03ENONNNpuQGVUrA\ngXkAzjxyF1g71DJEkpKGMw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "python-access@hackathon-team-07.iam.gserviceaccount.com",
+  "client_id": "110036260329684729037",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/python-access%40hackathon-team-07.iam.gserviceaccount.com"
+}

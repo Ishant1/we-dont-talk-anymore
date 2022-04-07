@@ -11,6 +11,7 @@ from streamlit_webrtc import (
     RTCConfiguration,
     webrtc_streamer,
 )
+from google.cloud import storage
 
 HERE = Path(__file__).parent
 
@@ -21,8 +22,35 @@ RTC_CONFIGURATION = RTCConfiguration(
 )
 
 
-def send_audio_and_text(audio_file_id: str, text: str) -> None:
+def send_audio_and_text(audio_file_id: str, text: str) -> str:
     pass
+    # api call(file_id, text)
+    # api read wav file, return wav file sounding like origin text but saying `text`
+
+    # should return uuid of generated audio
+
+
+def upload_to_bucket(bucket_name, source_file, destination_blob_name):
+    """Uploads a file to the bucket."""
+    # The ID of your GCS bucket
+    # bucket_name = "your-bucket-name"
+    # The path to your file to upload
+    # source_file_name = "local/path/to/file"
+    # The ID of your GCS object
+    # destination_blob_name = "storage-object-name"
+
+    storage_client = storage.Client.from_service_account_json(
+        "/Users/Ali_1/Documents/Coding/Google/lbg-hackathon-2022/we-dont-talk-anymore/hackathon-team-07-904256b7513d.json")
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    blob.upload_from_filename(source_file)
+
+    print(
+        "File uploaded to {}.".format(
+            destination_blob_name
+        )
+    )
 
 
 def main():
@@ -43,7 +71,10 @@ It can imitate your voice from a recording of a few seconds and say whatever you
               on_click=send_audio_and_text,
               )
     # This is the widget to display the imitated recording. We will remove the other stuff and display this afterwards.
-    # st.audio(data=audio_file, format="audio/wav")
+    # send_audio_and_text()
+    base_url = 'https://storage.googleapis.com/hackathon-team-07.appspot.com/'
+
+    st.audio(data='https://storage.googleapis.com/hackathon-team-07.appspot.com/7e89b7b4-906e-4c2f-9690-4bf13a36a379.wav', format="audio/wav")
 
 
 def app_sst():
@@ -90,14 +121,15 @@ def app_sst():
 
     if not webrtc_ctx.state.playing and len(audio_buffer) > 0:
         st.info("Writing wav to disk")
-        audio_buffer.export(rf"recordings/{uuid4()}.wav", format="wav")
+        uuid_str = uuid4()
+        audio_buffer.export(rf"recordings/{uuid_str}.wav", format="wav")
+        upload_to_bucket('hackathon-team-07.appspot.com', f'recordings/{uuid_str}.wav', f'{uuid_str}.wav')
 
         # Reset
         st.session_state["audio_buffer"] = pydub.AudioSegment.empty()
 
 
 if __name__ == "__main__":
-
     print('***************************')
 
     DEBUG = os.environ.get("DEBUG", "false").lower() not in ["false", "no", "0"]
