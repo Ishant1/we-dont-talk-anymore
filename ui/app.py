@@ -1,21 +1,11 @@
-import logging
 import logging.handlers
+import os
 import queue
-import threading
-import time
-import urllib.request
-from collections import deque
 from pathlib import Path
-from typing import List
 
-import av
-import numpy as np
 import pydub
 import streamlit as st
-
 from streamlit_webrtc import (
-    AudioProcessorBase,
-    ClientSettings,
     WebRtcMode,
     RTCConfiguration,
     webrtc_streamer,
@@ -29,6 +19,7 @@ RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
 )
 
+
 def main():
     st.header("Real Time Speech-to-Text")
     st.markdown(
@@ -40,44 +31,35 @@ A pre-trained model released with
 trained on American English is being served.
 """
     )
+    app_sst()
 
-    sound_chunk = app_sst()
-    return sound_chunk
 
 def app_sst():
     webrtc_ctx = webrtc_streamer(
-        key="speech-to-text",
+        key="some-unique-key",
         mode=WebRtcMode.SENDONLY,
-        audio_receiver_size=1024,
+        audio_receiver_size=256,
         rtc_configuration=RTC_CONFIGURATION,
         media_stream_constraints={"video": False, "audio": True},
-        )
+    )
+
+    if "audio_buffer" not in st.session_state:
+        st.session_state["audio_buffer"] = pydub.AudioSegment.empty()
 
     status_indicator = st.empty()
 
-    if not webrtc_ctx.state.playing:
-        print('not playing...')
-        return
-    print('playing...')
-
-    status_indicator.write("Loading...")
-
     while True:
         if webrtc_ctx.audio_receiver:
-            print('audio receiver true')
-            sound_chunk = pydub.AudioSegment.empty()
             try:
                 audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
             except queue.Empty:
-                print('queue is empty')
-                time.sleep(0.1)
                 status_indicator.write("No frame arrived.")
                 continue
 
             status_indicator.write("Running. Say something!")
 
+            sound_chunk = pydub.AudioSegment.empty()
             for audio_frame in audio_frames:
-                print(audio_frame)
                 sound = pydub.AudioSegment(
                     data=audio_frame.to_ndarray().tobytes(),
                     sample_width=audio_frame.format.bytes,
@@ -86,24 +68,31 @@ def app_sst():
                 )
                 sound_chunk += sound
 
-            if len(sound_chunk) == 0:
-                print('sound chunk has no length')
-                status_indicator.write("AudioReciver is not set. Abort.")
-                break
-            else:
-                sound_chunk.export(r"C:\Users\WinUser\dev\test.wav", format="wav")
-                print("exported wav file")
+            if len(sound_chunk) > 0:
+                st.session_state["audio_buffer"] += sound_chunk
+        else:
+            status_indicator.write("AudioReciver is not set. Abort.")
+            break
+
+    audio_buffer = st.session_state["audio_buffer"]
+
+    if not webrtc_ctx.state.playing and len(audio_buffer) > 0:
+        st.info("Writing wav to disk")
+        audio_buffer.export(r"recordings/temp.wav", format="wav")
+
+        # Reset
+        st.session_state["audio_buffer"] = pydub.AudioSegment.empty()
 
 
 if __name__ == "__main__":
-    import os
+
     print('***************************')
 
     DEBUG = os.environ.get("DEBUG", "false").lower() not in ["false", "no", "0"]
 
     logging.basicConfig(
         format="[%(asctime)s] %(levelname)7s from %(name)s in %(pathname)s:%(lineno)d: "
-        "%(message)s",
+               "%(message)s",
         force=True,
     )
 
