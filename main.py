@@ -24,8 +24,8 @@ args = {
 }
 
 # Inputs
-FILE_PATH = r'C:\Users\iagg1\Downloads\scottish_female\sof_00295_00015624900.wav'
-TEXT = 'Google merchant store data'
+FILE_PATH = r"C:\dev\data\northern-english-male\nom_00610_00161421677.wav"
+TEXT = 'We are team 7, and today we will be presenting on our hackathon project'
 
 
 print("Running a test of your configuration...\n")
@@ -52,10 +52,10 @@ try:
 
     # The following two methods are equivalent:
     # - Directly load from the filepath:
-    preprocessed_wav = encoder.preprocess_wav(FILE_PATH)
+    # preprocessed_wav = encoder.preprocess_wav(FILE_PATH)
     # - If the wav is already loaded:
-    # original_wav, sampling_rate = librosa.load(str(in_fpath))
-    # preprocessed_wav = encoder.preprocess_wav(original_wav, sampling_rate)
+    original_wav, sampling_rate = librosa.load(str(FILE_PATH))
+    preprocessed_wav = encoder.preprocess_wav(original_wav, sampling_rate)
     print("Loaded file succesfully")
 
     # Then we derive the embedding. There are many functions and parameters that the
