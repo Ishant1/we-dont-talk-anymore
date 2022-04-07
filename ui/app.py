@@ -2,6 +2,7 @@ import logging.handlers
 import os
 import queue
 from pathlib import Path
+from uuid import uuid4
 
 import pydub
 import streamlit as st
@@ -20,18 +21,29 @@ RTC_CONFIGURATION = RTCConfiguration(
 )
 
 
+def send_audio_and_text(audio_file_id: str, text: str) -> None:
+    pass
+
+
 def main():
-    st.header("Real Time Speech-to-Text")
+    st.header("We don't talk anymore")
     st.markdown(
         """
-This demo app is using [DeepSpeech](https://github.com/mozilla/DeepSpeech),
-an open speech-to-text engine.
-A pre-trained model released with
-[v0.9.3](https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.3),
-trained on American English is being served.
+This demo app from We don't talk anymore ™️.
+It can imitate your voice from a recording of a few seconds and say whatever you want it to say.
 """
     )
     app_sst()
+    st.text_input(label='What do you want to hear yourself say?',
+                  value='We don\'t talk anymore',
+                  key='text-input-for-speech')
+    st.button(label='Submit text and recording of my voice',
+              key='submit-audio-text-button',
+              help='Generate your audio file!',
+              on_click=send_audio_and_text,
+              )
+    # This is the widget to display the imitated recording. We will remove the other stuff and display this afterwards.
+    # st.audio(data=audio_file, format="audio/wav")
 
 
 def app_sst():
@@ -78,7 +90,7 @@ def app_sst():
 
     if not webrtc_ctx.state.playing and len(audio_buffer) > 0:
         st.info("Writing wav to disk")
-        audio_buffer.export(r"recordings/temp.wav", format="wav")
+        audio_buffer.export(rf"recordings/{uuid4()}.wav", format="wav")
 
         # Reset
         st.session_state["audio_buffer"] = pydub.AudioSegment.empty()
