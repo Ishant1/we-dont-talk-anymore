@@ -100,7 +100,7 @@ def app_sst():
     audio_buffer = st.session_state["audio_buffer"]
 
     if not webrtc_ctx.state.playing and len(audio_buffer) > 0:
-        st.info("Writing wav to disk")
+        # st.info("Writing wav to disk")
         uuid_str = uuid4()
         st.session_state["uuid_str"] = uuid_str
         audio_buffer.export(rf"recordings/{uuid_str}.wav", format="wav")
@@ -117,7 +117,7 @@ def enter_text():
                         )
     
 def submit_audio_and_text():
-    st.button(label='Submit text and recording of my voice',
+    st.button(label='Submit',
                 key='submit-audio-text-button',
                 help='Generate your audio file!',
                 on_click=send_audio_and_text,
@@ -134,11 +134,15 @@ def display_audio():
 
 #***********************************************************************************#
 def main():
-    st.header("We don't talk anymore")
+    st.image('images\MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_1.jpg')
+    st.header("We Don't Talk Anymore")
     st.markdown(
         """
-Making Britain Quieter.
-We can imitate your voice from a recording of a few seconds, and get you to say whatever you want.
+Tired of saying the same thing at Stand Up everyday? Want to ask for a raise but you're to nervous? Need to impersonate your Line Manager giving you great feedback? 
+
+We can imitate a voice from a recording of a few seconds, to satsify all your speaking needs.
+
+Press Start to begin recording...
 """
     )
     app_sst()
