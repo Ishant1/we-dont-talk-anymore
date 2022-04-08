@@ -24,8 +24,9 @@ RTC_CONFIGURATION = RTCConfiguration(
 st.session_state["upload_complete"] = False
 st.session_state["user_input"] = ""
 
+
 def send_audio_and_text(audio_file_id: str, text: str) -> str:
-    st.session_state['uuid_to_read'] = "0c18e3b5-f209-45de-9096-f0b4d4b413a7" #TODO: CHANGE THIS WITH API UUID
+    st.session_state['uuid_to_read'] = "0c18e3b5-f209-45de-9096-f0b4d4b413a7"  # TODO: CHANGE THIS WITH API UUID
     # return audio_file_id, text
     # api call(file_id, text)
     # api read wav file, return wav file sounding like origin text but saying `text`
@@ -42,18 +43,20 @@ def upload_to_bucket(bucket_name, source_file, destination_blob_name):
     # The ID of your GCS object
     # destination_blob_name = "storage-object-name"
 
-    # storage_client = storage.Client.from_service_account_json(
-    #     "hackathon-team-07-904256b7513d.json")
-    # bucket = storage_client.bucket(bucket_name)
-    # blob = bucket.blob(destination_blob_name)
+    storage_client = storage.Client.from_service_account_json(
+        "hackathon-team-07-904256b7513d.json")
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
 
-    # blob.upload_from_filename(source_file)
+    blob.upload_from_filename(source_file)
 
-    # print(
-    #     "File uploaded to {}.".format(
-    #         destination_blob_name
-    #     )
-    # )
+    print(
+        "File uploaded to {}.".format(
+            destination_blob_name
+        )
+    )
+    return True
+
 
 def app_sst():
     """
@@ -104,18 +107,21 @@ def app_sst():
         uuid_str = uuid4()
         st.session_state["uuid_str"] = uuid_str
         audio_buffer.export(rf"recordings/{uuid_str}.wav", format="wav")
-        upload_to_bucket('hackathon-team-07.appspot.com', f'recordings/{uuid_str}.wav', f'{uuid_str}.wav')
+        if upload_to_bucket('hackathon-team-07.appspot.com', f'recordings/{uuid_str}.wav', f'{uuid_str}.wav'):
+            # Reset
+            st.session_state["audio_buffer"] = pydub.AudioSegment.empty()
+            st.session_state["upload_complete"] = True
+        else:
+            print('Failed to upload audio file to Cloud Storage bucket')
 
-        # Reset
-        st.session_state["audio_buffer"] = pydub.AudioSegment.empty()
-        st.session_state["upload_complete"] = True
 
 def enter_text():
     st.session_state["user_input"] = st.text_input(label='What do you want to hear yourself say?',
-                        value='We don\'t talk anymore',
-                        key='text-input-for-speech',
-                        )
-    
+                                                   value='We don\'t talk anymore',
+                                                   key='text-input-for-speech',
+                                                   )
+
+
 def submit_audio_and_text():
     st.button(label='Submit',
                 key='submit-audio-text-button',
@@ -125,14 +131,14 @@ def submit_audio_and_text():
                 )
 
 def display_audio():
-# This is the widget to display the imitated recording. We will remove the other stuff and display this afterwards.
+    # This is the widget to display the imitated recording. We will remove the other stuff and display this afterwards.
     # send_audio_and_text()
     base_url = 'https://storage.googleapis.com/hackathon-team-07.appspot.com'
     audio_url = f'{base_url}/{st.session_state["uuid_to_read"]}.wav'
     st.audio(data=audio_url, format="audio/wav")
-    
 
-#***********************************************************************************#
+
+# ***********************************************************************************#
 def main():
     st.image('images\MV5BOWQyYmJiOWUtNzkzYS00YWJlLWI5YjgtYTg4MjI0MmM1N2ZkXkEyXkFqcGdeQXVyNjE0ODc0MDc@._V1_1.jpg')
     st.header("We Don't Talk Anymore")
@@ -146,7 +152,7 @@ Press Start to begin recording...
 """
     )
     app_sst()
-    if st.session_state["upload_complete"] == True:
+    if st.session_state["upload_complete"]:
         enter_text()
         submit_audio_and_text()
 
