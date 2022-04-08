@@ -1,21 +1,12 @@
 from google.cloud import documentai_v1 as documentai
-from google.cloud import storage
 import os
 
-# TODO(developer): Uncomment these variables before running the sample.
-# project_id= 'YOUR_PROJECT_ID'
-# location = 'YOUR_PROJECT_LOCATION' # Format is 'us' or 'eu'
-# processor_id = 'YOUR_PROCESSOR_ID' # Create processor in Cloud Console
-# gcs_input_uri = "YOUR_INPUT_URI"
-# gcs_output_uri = "YOUR_OUTPUT_BUCKET_URI"
-# gcs_output_uri_prefix = "YOUR_OUTPUT_URI_PREFIX"
+
 project_id = "hackathon-team-07"
 processor_id = "ff2b8b191f175e01"
 
 
 def process_document_sample(blob_content):
-    from google.cloud import documentai_v1 as documentai
-
     # You must set the api_endpoint if you use a location other than 'us', e.g.:
     opts = {"api_endpoint": "eu-documentai.googleapis.com"}
 
@@ -73,6 +64,3 @@ def get_text(doc_element: dict, document: dict):
         response += document.text[start_index:end_index]
     return response
 
-file_path = "doc_ai_input.pdf"
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\wafi-\Downloads\hackathon-team-07-170cf73a6fea.json"
-process_document_sample(file_path=file_path)
