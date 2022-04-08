@@ -9,12 +9,11 @@ import os
 # gcs_input_uri = "YOUR_INPUT_URI"
 # gcs_output_uri = "YOUR_OUTPUT_BUCKET_URI"
 # gcs_output_uri_prefix = "YOUR_OUTPUT_URI_PREFIX"
+project_id = "hackathon-team-07"
+processor_id = "ff2b8b191f175e01"
 
 
-
-def process_document_sample(
-    project_id: str, processor_id: str, file_path: str
-):
+def process_document_sample(blob_content):
     from google.cloud import documentai_v1 as documentai
 
     # You must set the api_endpoint if you use a location other than 'us', e.g.:
@@ -27,12 +26,6 @@ def process_document_sample(
     # You must create new processors in the Cloud Console first
     name = f"projects/{project_id}/locations/eu/processors/{processor_id}"
 
-    bucket_client = storage.Client()
-
-    bucket = client.get_bucket('hackathon-team-07.appspot.com')
-
-    blob = bucket.get_blob('{file_path}')
-    blob_content = blob.download_as_bytes()
 
     # Read the file into memory
     document = {"content": blob_content, "mime_type": "application/pdf"}
@@ -80,23 +73,6 @@ def get_text(doc_element: dict, document: dict):
         response += document.text[start_index:end_index]
     return response
 
-
-def main():
-    project_id = "hackathon-team-07"
-    processor_id = "ff2b8b191f175e01"
-    file_path = "doc_ai_input.pdf"
-    
-    document = process_document_sample(
-        project_id=project_id,
-        processor_id=processor_id,
-        file_path=file_path
-        )
-    return document
-
+file_path = "doc_ai_input.pdf"
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\wafi-\Downloads\hackathon-team-07-170cf73a6fea.json"
-bucket_client = storage.Client()
-
-bucket = bucket_client.get_bucket('hackathon-team-07.appspot.com')
-
-blob = bucket.get_blob('{file_path}')
-blob_content = blob.download_as_bytes()
+process_document_sample(file_path=file_path)
